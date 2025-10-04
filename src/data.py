@@ -101,6 +101,10 @@ def get_data_loaders(
     split = int(math.ceil(valid_size * n_tot))
     train_idx, valid_idx = indices[split:], indices[:split]
 
+    print("Train dataset size:", len(train_idx))
+    print("Valid dataset size:", len(valid_idx))
+
+
     # define samplers for obtaining training and validation batches
     train_sampler = torch.utils.data.SubsetRandomSampler(train_idx)
     valid_sampler  = torch.utils.data.SubsetRandomSampler(valid_idx)
@@ -212,7 +216,7 @@ def test_data_loaders_keys(data_loaders):
 def test_data_loaders_output_type(data_loaders):
     # Test the data loaders
     dataiter = iter(data_loaders["train"])
-    images, labels = dataiter.next()
+    images, labels = next(dataiter)
 
     assert isinstance(images, torch.Tensor), "images should be a Tensor"
     assert isinstance(labels, torch.Tensor), "labels should be a Tensor"
@@ -222,7 +226,7 @@ def test_data_loaders_output_type(data_loaders):
 
 def test_data_loaders_output_shape(data_loaders):
     dataiter = iter(data_loaders["train"])
-    images, labels = dataiter.next()
+    images, labels = next(dataiter)
 
     assert len(images) == 2, f"Expected a batch of size 2, got size {len(images)}"
     assert (
